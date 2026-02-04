@@ -1,0 +1,12 @@
+services:
+  app:
+    command: >
+      sh -c "npm install &&
+      node wait-for-db.js &&
+      npx sequelize-cli db:create &&
+      npx sequelize-cli db:migrate &&
+      pm2-runtime --node-args=--inspect=0.0.0.0:9229 index.js"
+    environment:
+      NODE_ENV: development
+    ports:
+      - "9229:9229"

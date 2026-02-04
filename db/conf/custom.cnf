@@ -1,0 +1,12 @@
+[mysqld]
+# Basic performance tuning for containerized dev
+innodb_buffer_pool_size = 128M
+innodb_log_file_size = 64M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+max_connections = 75
+thread_cache_size = 50
+
+# Logging (keep modest for dev)
+slow_query_log = 1
+long_query_time = 1

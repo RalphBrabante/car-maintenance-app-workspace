@@ -21,6 +21,9 @@ node_modules/
 /dist/
 /build/
 
+# DB data
+db/data/
+
 # Temporary files
 *.tmp
 *.swp

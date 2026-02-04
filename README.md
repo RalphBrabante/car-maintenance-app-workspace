@@ -37,13 +37,28 @@ docker compose up -d --build
 - App (via nginx): http://localhost
 - MySQL: localhost:3306
 
+## Debugging (VS Code + Docker)
+
+Start the stack with the debug override:
+```bash
+docker compose -f docker-compose.yml -f docker-compose.debug.yml up -d --build
+```
+
+Then in VS Code run the debugger:
+- `Attach to Docker (Node)`
+
+This attaches to `localhost:9229` and maps the container path `/app` to `services/app`.
+
 ## Project Structure
 
 ```
 .
 ├── docker-compose.yml
+├── docker-compose.debug.yml
 ├── nginx/
 │   └── default.conf
+├── .vscode/
+│   └── launch.json
 ├── services/
 │   └── app/   # git submodule: git@github.com:RalphBrabante/car-maintenance-app.git
 └── .env
@@ -53,6 +68,21 @@ docker compose up -d --build
 
 - The app is proxied by nginx from port 80 to the app on port 3000.
 - MySQL data is stored in a named volume: `mysql_data`.
+
+## DigitalOcean (Low/Dev - Cheapest Droplet)
+
+Recommended baseline:
+- Droplet: 1 vCPU / 1 GB RAM
+- Docker + Compose
+- Keep MySQL on the droplet
+
+Optimizations applied in `docker-compose.yml`:
+- `restart: unless-stopped` for `app` and `nginx`
+- Lightweight resource limits for a small droplet
+
+MySQL tuning in `db/conf/custom.cnf`:
+- `innodb_buffer_pool_size = 128M`
+- `max_connections = 75`
 
 ## Common Commands
 
