@@ -25,6 +25,28 @@ services:
     mem_limit: 512m
     cpu_shares: 256
 
+  email_worker:
+    build:
+      context: services/app
+    container_name: car_maintenance_email_worker
+    restart: unless-stopped
+    command: >
+      sh -c "npm install &&
+      node wait-for-db.js &&
+      node src/jobs/emailWorker.js"
+    env_file:
+      - ./.env
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - db
+    mem_limit: 256m
+    cpu_shares: 128
+
   db:
     image: mysql:8.0
     container_name: car_maintenance_db
